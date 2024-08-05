@@ -8,7 +8,7 @@ WORKDIR /app
 COPY . /app
 
 # Instale as dependências do projeto
-RUN pip install crewai==0.5.0 crewai_tools==0.4.26
+RUN echo "crewai==0.5.0\crewai_tools" > requirements.txt
 
 # Comando para iniciar a aplicação
 CMD ["python", "src/ranking_crew/main.py"]
