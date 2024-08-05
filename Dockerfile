@@ -14,4 +14,4 @@ RUN echo "crewai==0.5.0" > requirements.txt
 RUN pip install --no-cache-dir -r requirements.txt
 
 # Comando para iniciar a aplicação
-CMD ["python", "src/<ranking_crew>/main.py"]
+CMD ["python", "src/ranking_crew/main.py"]
