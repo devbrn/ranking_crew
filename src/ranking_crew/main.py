@@ -1,5 +1,6 @@
 # src/ranking_crew/main.py
 
-if __name__ == "__main__":
-    print("CrewAI project running")
+from crew import run_crew
 
+if __name__ == "__main__":
+    run_crew()
