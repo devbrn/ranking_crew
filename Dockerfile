@@ -1,5 +1,5 @@
-# Use uma imagem base oficial do Python
-FROM python:3.9
+# Use uma imagem base oficial do Python 3.10
+FROM python:3.10
 
 # Defina o diretório de trabalho
 WORKDIR /app
@@ -8,7 +8,7 @@ WORKDIR /app
 COPY . /app
 
 # Criar o arquivo requirements.txt
-RUN echo "crewai\ncrewai_tools" > requirements.txt
+RUN echo "crewai==0.5.0\ncrewai-tools" > requirements.txt
 
 # Instale as dependências do projeto
 RUN pip install --no-cache-dir -r requirements.txt
