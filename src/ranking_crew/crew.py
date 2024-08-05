@@ -1,4 +1,8 @@
-# src/ranking_crew/crew.py
+import sys
+import os
+
+# Adiciona o diretório do projeto ao sys.path
+sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
 
 from crewai import Agent, Task, Crew, Process
 from crewai_tools import SerperDevTool
