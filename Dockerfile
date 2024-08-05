@@ -7,8 +7,8 @@ WORKDIR /app
 # Copie os arquivos do projeto para o contêiner
 COPY . /app
 
-# Instale as dependências do projeto, incluindo as ferramentas
-RUN pip install 'crewai[tools]==0.5.0'
+# Instale as dependências do projeto
+RUN pip install crewai==0.5.0 crewai_tools==0.4.26
 
 # Comando para iniciar a aplicação
 CMD ["python", "src/ranking_crew/main.py"]
