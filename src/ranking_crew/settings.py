@@ -1,0 +1,2 @@
+OPENAI_MODE_NAME = "gpt-4o"
+OPENAI_API_KEY = "k-proj-vRZnurkQaMLwEYRqtr8yJmQa10FpWz2Lb6oekAxwomJjC3oxNHn8gXuQsSllBo0NXvjOebRV8iT3BlbkFJ_VOtessZ8FW2BFA95wxA_hkjihpnBpf9WUIhDCYEmSHkO5e0Gfo1Xysuc28nzI9o3GuB09rUwA"
