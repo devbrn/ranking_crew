@@ -1,3 +1,4 @@
 # requirements.txt
 crewai==0.5.0
 crewai_tools==0.3.0
+langchain==0.2.0
