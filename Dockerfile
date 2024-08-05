@@ -7,11 +7,8 @@ WORKDIR /app
 # Copie os arquivos do projeto para o contêiner
 COPY . /app
 
-# Criar o arquivo requirements.txt
-RUN echo "crewai==0.5.0\crewai_tools" > requirements.txt
-
-# Instale as dependências do projeto
-RUN pip install --no-cache-dir -r requirements.txt
+# Instale as dependências do projeto, incluindo as ferramentas
+RUN pip install 'crewai[tools]==0.5.0'
 
 # Comando para iniciar a aplicação
 CMD ["python", "src/ranking_crew/main.py"]
