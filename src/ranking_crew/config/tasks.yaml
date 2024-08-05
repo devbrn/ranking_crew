@@ -1,1 +1,3 @@
-
+research_candidates_task:
+  description: "Conduza uma pesquisa minuciosa para encontrar candidatos potenciais para o trabalho especificado."
+  expected_output: "Uma lista de 10 candidatos potenciais com suas informações de contato e perfis resumidos."
