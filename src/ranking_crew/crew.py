@@ -1,7 +1,6 @@
 # src/ranking_crew/crew.py
 
 from crewai import Agent, Task, Crew, Process
-from crewai_tools import SerperDevTool
 from tools.custom_tool import example_tool
 
 search_tool = SerperDevTool()
