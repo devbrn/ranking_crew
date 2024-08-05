@@ -8,7 +8,7 @@ WORKDIR /app
 COPY . /app
 
 # Criar o arquivo requirements.txt
-RUN echo "crewai==0.5.0\ncrewai_tools==0.3.0" > requirements.txt
+RUN echo "crewai==0.5.0\ncrewai_tools" > requirements.txt
 
 # Instale as dependências do projeto
 RUN pip install --no-cache-dir -r requirements.txt
