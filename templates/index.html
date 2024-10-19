@@ -67,25 +67,6 @@
     </div>
 
     <script>
-        async function fetchAgentStatus() {
-            try {
-                const response = await fetch('/agents-status');
-                const data = await response.json();
-
-                // Atualizar informações dos agentes
-                document.getElementById('researcher-goal').innerText = data.researcher.goal;
-                document.getElementById('researcher-status').innerText = data.researcher.state;
-                document.getElementById('writer-goal').innerText = data.writer.goal;
-                document.getElementById('writer-status').innerText = data.writer.state;
-            } catch (error) {
-                console.error('Erro ao obter status dos agentes:', error);
-            }
-        }
-
-        // Atualizar o status dos agentes a cada 5 segundos
-        setInterval(fetchAgentStatus, 5000);
-
-        // Enviar tarefa ao servidor
         document.getElementById('task-form').addEventListener('submit', async function (e) {
             e.preventDefault();
             const description = document.getElementById('description').value;
@@ -104,11 +85,33 @@
                 });
 
                 const result = await response.json();
-                console.log('Tarefa concluída:', result);
+                if (result.error) {
+                    console.error('Erro:', result.error);
+                } else {
+                    alert('Tarefa concluída: ' + result.result);
+                }
             } catch (error) {
                 console.error('Erro ao enviar tarefa:', error);
             }
         });
+
+        async function fetchAgentStatus() {
+            try {
+                const response = await fetch('/agents-status');
+                const data = await response.json();
+
+                // Atualizar informações dos agentes
+                document.getElementById('researcher-goal').innerText = data.researcher.goal;
+                document.getElementById('researcher-status').innerText = data.researcher.state;
+                document.getElementById('writer-goal').innerText = data.writer.goal;
+                document.getElementById('writer-status').innerText = data.writer.state;
+            } catch (error) {
+                console.error('Erro ao obter status dos agentes:', error);
+            }
+        }
+
+        // Atualizar o status dos agentes a cada 5 segundos
+        setInterval(fetchAgentStatus, 5000);
 
         // Carregar o status imediatamente ao carregar a página
         fetchAgentStatus();
