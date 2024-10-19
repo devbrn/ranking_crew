@@ -1,6 +1,11 @@
 from flask import Flask, jsonify, render_template, request
 from crew import crew  # Importando o CrewAI e a tripulação
 from crewai import Task
+import logging
+
+# Configurando logging para mostrar no console
+logging.basicConfig(level=logging.INFO)
+logger = logging.getLogger(__name__)
 
 app = Flask(__name__)
 
@@ -17,9 +22,12 @@ def assign_task():
 
     # Garantir que a descrição e o resultado esperado foram enviados
     if not task_data or 'description' not in task_data or 'expected_output' not in task_data:
+        logger.error("Dados incompletos. Envie a descrição e o resultado esperado.")
         return jsonify({'error': 'Dados incompletos. Envie a descrição e o resultado esperado da tarefa.'}), 400
 
     try:
+        logger.info("Recebendo tarefa: %s", task_data['description'])
+        
         # Criar uma nova tarefa para o agente Pesquisador
         task = Task(
             description=task_data['description'],
@@ -29,10 +37,12 @@ def assign_task():
 
         # Executar a tarefa e obter o resultado
         result = task.run()
+        logger.info("Tarefa concluída. Resultado: %s", result)
 
         # Retornar o resultado da tarefa
         return jsonify({'result': result})
     except Exception as e:
+        logger.error("Erro ao executar a tarefa: %s", str(e))
         return jsonify({'error': str(e)}), 500
 
 # Rota para renderizar a página de status
@@ -56,8 +66,10 @@ def agents_status():
                 'state': 'Aguardando pesquisa'
             }
         }
+        logger.info("Status dos agentes: %s", status)
     else:
         status = {'error': 'Agentes não encontrados.'}
+        logger.error("Nenhum agente encontrado.")
     
     return jsonify(status)
 
