@@ -37,56 +37,34 @@ writer = Agent(
     )
 )
 
-# Definir tarefas que os agentes vão executar
-research_task = Task(
-    description="Pesquisar tendências de {topic} e gerar um relatório.",
-    expected_output="Relatório de 3 parágrafos sobre as últimas tendências em {topic}.",
-    agent=researcher,
-)
-
-write_task = Task(
-    description="Escrever um artigo sobre {topic} baseado no relatório de tendências.",
-    expected_output="Artigo de 4 parágrafos sobre {topic}, formatado em Markdown.",
-    agent=writer,
-)
-
-# Criar o Crew com os agentes e as tarefas
-crew = Crew(
-    agents=[researcher, writer],
-    tasks=[research_task, write_task],
-    process=Process.sequential
-)
-
-@app.route('/')
-def home():
-    return "Bem-vindo à aplicação Flask com CrewAI!"
-
-# Rota para atribuir um novo tópico e executar as tarefas dos agentes
+# Definir o endpoint para atribuir tarefas
 @app.route('/assign-task', methods=['POST'])
 def assign_task():
     task_data = request.json
 
-    if not task_data or 'topic' not in task_data:
-        return jsonify({'error': 'Dados incompletos. Envie um tópico.'}), 400
+    if not task_data or 'description' not in task_data or 'agent' not in task_data:
+        return jsonify({'error': 'Dados incompletos. Envie uma descrição e o agente.'}), 400
+
+    agent_name = task_data['agent']
+    if agent_name == 'researcher':
+        agent = researcher
+    elif agent_name == 'writer':
+        agent = writer
+    else:
+        return jsonify({'error': 'Agente desconhecido.'}), 400
 
     try:
-        # Iniciar o Crew com o tópico definido
-        result = crew.kickoff(inputs={"topic": task_data['topic']})
+        # Criar a tarefa com o agente selecionado
+        task = Task(
+            description=task_data['description'],
+            expected_output=task_data['expected_output'],
+            agent=agent
+        )
+        crew = Crew(agents=[agent], tasks=[task], process=Process.sequential)
+        result = crew.kickoff(inputs={"topic": task_data['description']})
         return jsonify({'result': result})
     except Exception as e:
         return jsonify({'error': str(e)}), 500
-
-@app.route('/status')
-def status_page():
-    return render_template('index.html')
-
-@app.route('/agents-status', methods=['GET'])
-def agents_status():
-    status = {
-        "researcher": {"role": researcher.role, "goal": researcher.goal, "state": "Trabalhando"},
-        "writer": {"role": writer.role, "goal": writer.goal, "state": "Aguardando pesquisa"}
-    }
-    return jsonify(status)
 
 if __name__ == '__main__':
     app.run(debug=True, host='0.0.0.0', port=5000)

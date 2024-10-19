@@ -50,6 +50,12 @@
             <label for="expected_output">Resultado Esperado:</label>
             <input type="text" id="expected_output" name="expected_output" required>
 
+            <label for="agent">Escolha o Agente:</label>
+            <select id="agent" name="agent" required>
+                <option value="researcher">Pesquisador</option>
+                <option value="writer">Escritor</option>
+            </select>
+
             <button type="submit">Enviar Tarefa</button>
         </form>
     </div>
@@ -71,6 +77,7 @@
             e.preventDefault();
             const description = document.getElementById('description').value;
             const expected_output = document.getElementById('expected_output').value;
+            const agent = document.getElementById('agent').value;
 
             try {
                 const response = await fetch('/assign-task', {
@@ -80,18 +87,21 @@
                     },
                     body: JSON.stringify({
                         description: description,
-                        expected_output: expected_output
+                        expected_output: expected_output,
+                        agent: agent
                     })
                 });
 
                 const result = await response.json();
                 if (result.error) {
                     console.error('Erro:', result.error);
+                    alert('Erro: ' + result.error);
                 } else {
-                    alert('Tarefa concluída: ' + result.result);
+                    alert('Tarefa atribuída com sucesso: ' + result.result);
                 }
             } catch (error) {
                 console.error('Erro ao enviar tarefa:', error);
+                alert('Erro ao enviar tarefa: ' + error.message);
             }
         });
 
