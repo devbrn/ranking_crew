@@ -1,0 +1,17 @@
+# Usar uma imagem Python leve
+FROM python:3.9-slim
+
+# Definir o diretório de trabalho dentro do container
+WORKDIR /app
+
+# Copiar os arquivos da aplicação para o container
+COPY . .
+
+# Instalar as dependências da aplicação
+RUN pip install -r requirements.txt
+
+# Expor a porta em que o Flask vai rodar (normalmente porta 5000)
+EXPOSE 5000
+
+# Definir o comando para iniciar a aplicação Flask
+CMD ["python", "app.py"]
