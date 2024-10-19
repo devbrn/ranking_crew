@@ -26,10 +26,33 @@
             color: #2d6a4f;
             font-weight: bold;
         }
+        .task-form {
+            margin-bottom: 20px;
+            padding: 20px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+        }
+        .task-form label {
+            display: block;
+            margin-bottom: 10px;
+        }
     </style>
 </head>
 <body>
     <h1>Status dos Agentes</h1>
+
+    <div class="task-form">
+        <h2>Atribuir uma Tarefa</h2>
+        <form id="task-form">
+            <label for="description">Descrição da Tarefa:</label>
+            <input type="text" id="description" name="description" required>
+
+            <label for="expected_output">Resultado Esperado:</label>
+            <input type="text" id="expected_output" name="expected_output" required>
+
+            <button type="submit">Enviar Tarefa</button>
+        </form>
+    </div>
 
     <div id="researcher" class="agent">
         <h2>Pesquisador</h2>
@@ -61,6 +84,31 @@
 
         // Atualizar o status dos agentes a cada 5 segundos
         setInterval(fetchAgentStatus, 5000);
+
+        // Enviar tarefa ao servidor
+        document.getElementById('task-form').addEventListener('submit', async function (e) {
+            e.preventDefault();
+            const description = document.getElementById('description').value;
+            const expected_output = document.getElementById('expected_output').value;
+
+            try {
+                const response = await fetch('/assign-task', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        description: description,
+                        expected_output: expected_output
+                    })
+                });
+
+                const result = await response.json();
+                console.log('Tarefa concluída:', result);
+            } catch (error) {
+                console.error('Erro ao enviar tarefa:', error);
+            }
+        });
 
         // Carregar o status imediatamente ao carregar a página
         fetchAgentStatus();

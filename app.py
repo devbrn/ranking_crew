@@ -1,5 +1,5 @@
-from flask import Flask, jsonify, render_template
-from crew import crew  # Importando a configuração do CrewAI
+from flask import Flask, jsonify, render_template, request
+from crew import crew  # Importando o CrewAI e a tripulação
 
 app = Flask(__name__)
 
@@ -7,10 +7,23 @@ app = Flask(__name__)
 def home():
     return "Bem-vindo à aplicação Flask com CrewAI!"
 
-@app.route('/start-crew', methods=['GET'])
-def start_crew():
-    result = crew.kickoff()
-    return jsonify(result)
+# Rota para iniciar o crew e delegar tarefas dinâmicas
+@app.route('/assign-task', methods=['POST'])
+def assign_task():
+    task_data = request.json  # Esperando dados em formato JSON
+
+    # Exemplo: atribuindo ao pesquisador
+    task = Task(
+        description=task_data.get('description'),
+        expected_output=task_data.get('expected_output'),
+        agent=crew.agents[0]  # Assignando ao pesquisador (por exemplo)
+    )
+    
+    # Executa a tarefa
+    result = task.run()
+    
+    # Retorna o resultado da tarefa
+    return jsonify({'result': result})
 
 @app.route('/status')
 def status_page():
@@ -18,7 +31,6 @@ def status_page():
 
 @app.route('/agents-status', methods=['GET'])
 def agents_status():
-    # Verificar se os agentes existem antes de acessar
     if len(crew.agents) >= 2:
         status = {
             'researcher': {
