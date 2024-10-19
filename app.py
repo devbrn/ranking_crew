@@ -35,11 +35,14 @@ def assign_task():
             agent=crew.agents[0]  # Atribuir ao Pesquisador (primeiro agente)
         )
 
-        # Executar a tarefa e obter o resultado
-        result = task.run()
-        logger.info("Tarefa concluída. Resultado: %s", result)
+        # Adicionar a nova tarefa ao Crew
+        crew.tasks.append(task)
 
-        # Retornar o resultado da tarefa
+        # Executar todas as tarefas (inclusive a nova) usando o kickoff
+        result = crew.kickoff()
+
+        # Logar o resultado e retornar a resposta
+        logger.info("Tarefa concluída. Resultado: %s", result)
         return jsonify({'result': result})
     except Exception as e:
         logger.error("Erro ao executar a tarefa: %s", str(e))
