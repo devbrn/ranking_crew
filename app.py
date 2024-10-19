@@ -1,4 +1,4 @@
-from flask import Flask, jsonify
+from flask import Flask, jsonify, render_template
 from crew import crew  # Importando a configuração do CrewAI
 
 app = Flask(__name__)
@@ -18,19 +18,23 @@ def status_page():
 
 @app.route('/agents-status', methods=['GET'])
 def agents_status():
-    # Aqui você pode adaptar para retornar informações sobre o estado atual dos agentes
-    status = {
-        'researcher': {
-            'role': crew.agents[0].role,
-            'goal': crew.agents[0].goal,
-            'state': 'Trabalhando'
-        },
-        'writer': {
-            'role': crew.agents[1].role,
-            'goal': crew.agents[1].goal,
-            'state': 'Aguardando pesquisa'
+    # Verificar se os agentes existem antes de acessar
+    if len(crew.agents) >= 2:
+        status = {
+            'researcher': {
+                'role': crew.agents[0].role,
+                'goal': crew.agents[0].goal,
+                'state': 'Trabalhando'
+            },
+            'writer': {
+                'role': crew.agents[1].role,
+                'goal': crew.agents[1].goal,
+                'state': 'Aguardando pesquisa'
+            }
         }
-    }
+    else:
+        status = {'error': 'Agentes não encontrados.'}
+    
     return jsonify(status)
 
 if __name__ == '__main__':
